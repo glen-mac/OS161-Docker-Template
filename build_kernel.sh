@@ -3,8 +3,8 @@
 # fail if any command returns a non-zero code
 set -e
 
-base='/home'
-src_base="${base}/os161-src"
+base=${1:-'/home'}
+src_base="${base}/${2:-os161-src}"
 
 cd "${src_base}"
 ./configure --ostree="${base}/root"

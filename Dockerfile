@@ -4,10 +4,13 @@ FROM ubuntu:14.04
 
 # UPDATE PACKAGE LIST AND INSTALL REQUIRED PACKAGES
 # =================================================
+# install vim just because its useful
 RUN apt-get update && apt-get install -y \
     wget \
     git \
-    gcc
+    gcc \
+    libpython2.7 \
+    vim
 
 # GET REQUIRED OS161 BINARIES (E.G. bmake)
 # =======================================
@@ -32,6 +35,14 @@ ADD ./build_kernel.sh /home
 # ==========================
 # Note: This can be done inside the container as well by running the build_kernel script
 # RUN /home/build_kernel.sh
+
+# SETUP INIT CONFIG FOR OS161-GDB
+# ===============================
+ ADD ./.gdbinit-os161 /home/root/.gdbinit
+
+# SETUP INIT CONFIG FOR STANDARD GDB
+# ==================================
+ADD ./.gdbinit-root /root/.gdbinit
 
 # SET CWD BACK TO HOME
 # ===================
