@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# fail if any command returns a non-zero code
+set -e
+
 base='/home'
 src_base="${base}/os161-src"
 
