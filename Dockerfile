@@ -1,6 +1,6 @@
 # BASE IMAGE
 # =========
-FROM ubuntu:14.04
+FROM ubuntu:16.04
 
 # UPDATE PACKAGE LIST AND INSTALL REQUIRED PACKAGES
 # =================================================
@@ -10,44 +10,47 @@ RUN apt-get update && apt-get install -y \
     git \
     gcc \
     libpython2.7 \
-    vim
+    vim \
+    sed
 
 # GET REQUIRED OS161 BINARIES (E.G. bmake)
 # =======================================
-WORKDIR /home
+WORKDIR /root
 RUN wget http://www.cse.unsw.edu.au/~cs3231/os161-files/os161-utils_2.0.8.deb
 RUN dpkg -i os161-utils_2.0.8.deb && rm os161-utils_2.0.8.deb
 
-# SETUP CONFIG FOR BUILD KERNEL
-# =============================
-WORKDIR /home/root
-RUN wget http://cgi.cse.unsw.edu.au/~cs3231/17s1/assignments/asst0/sys161-asst0.conf && mv sys161-asst0.conf sys161.conf
+# PEDA INSTALL
+# ===================
+RUN git clone https://github.com/longld/peda.git /root/peda
 
 # COPY OS161 SOURCE CODE INTO THE IMAGE
 # =====================================
-ADD ./src /home/os161-src
+ADD ./src /root/os161-src
 
-# ADD BUILD SCRIPT
-# ================
-ADD ./build_kernel.sh /home
-
-# OPTIONAL: BUILD THE KERNEL
-# ==========================
-# Note: This can be done inside the container as well by running the build_kernel script
-# RUN /home/build_kernel.sh
+# SETUP CONFIG FOR BUILD KERNEL
+# =============================
+RUN wget http://cgi.cse.unsw.edu.au/~cs3231/17s1/assignments/asst2/sys161-asst2.conf
+RUN mv sys161-asst2.conf /root/os161-src/sys161.conf
 
 # SETUP INIT CONFIG FOR OS161-GDB
 # ===============================
- ADD ./.gdbinit-os161 /home/root/.gdbinit
+ADD ./.gdbinit-os161 /root/os161-src/.gdbinit
 
 # SETUP INIT CONFIG FOR STANDARD GDB
 # ==================================
 ADD ./.gdbinit-root /root/.gdbinit
 
-# SET CWD BACK TO HOME
-# ===================
-WORKDIR /home
+# bash rc
+ADD ./bashrc /root/.bashrc
 
+# gitignore
+ADD ./gitignore /root/os161-src/.gitignore
+
+# SET CWD BACK TO HOME
+# ==================
+WORKDIR /root/os161-src
+
+RUN ./configure --ostree=/root/os161-src
 # RUN BASH
 # ========
 # Note: this image should be run with a -ti option.

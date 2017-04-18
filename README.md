@@ -4,7 +4,7 @@ The purpose of this repository is to provide a docker based workflow for using o
 
 This repository contains the following:
 
-- A copy of assignment 0 source code obtained by running `cp -r ~cs3231/assigns/asst0/src .` on a cse machine
+- A copy of assignment 0 source code obtained by running `cp -r ~cs3231/assigns/asst8/src .` on a cse machine
 - Relevant `.gdbinit` configurations to make os161-gdb work inside the container
 - A Dockerfile for defining the build rules for the docker image
 - A script to build the docker image
@@ -43,7 +43,7 @@ docker exec -ti os161-ass0 bash # assume the container name is os161-ass0
 cd root
 os161-gdb kernel
 # now inside gdb
-asst0 # connects to the kernel :)
+asst8 # connects to the kernel :)
 ```
 ### Some notes on this workflow
 Currently, the os161 source code is copied over to the image. This is less than ideal since you will need to re-build the image every time you change the source code
@@ -59,7 +59,7 @@ Eventually I will change the workflow so that the source code is mounted as a vo
 The dockerfile pulls two things from the internet (again just FYI)
 
 1. The .deb package that contains all the os161 utils
-2. The `sys161-asst0.conf` file.
+2. The `sys161-asst8.conf` file.
 
 Also, the dockerfile has commented a commented out section which when uncommented will build the os161 kernel in the image itself. Useful if you always want your source code compiled when the container starts
 
